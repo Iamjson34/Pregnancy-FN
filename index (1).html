@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Pregnancy Journey Companion</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --sage: #7C9A7E; --sage-light: #A8C2AA; --sage-pale: #EBF2EB;
+    --cream: #FAF7F2; --warm-white: #FFFFFF;
+    --forest: #2C3E2D; --forest-mid: #3D5740;
+    --gold: #C9A96E; --gold-light: #E8D5A8;
+    --text-dark: #1A2B1B; --text-mid: #4A5E4B; --text-muted: #7A8E7B;
+    --border: rgba(124,154,126,0.2);
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text-dark); overflow-x: hidden; }
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1.25rem 4rem;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(250,247,242,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    animation: fadeDown 0.8s ease forwards;
+  }
+  .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--forest); letter-spacing: 0.02em; }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a { font-size: 0.85rem; font-weight: 400; color: var(--text-mid); text-decoration: none; letter-spacing: 0.04em; text-transform: uppercase; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--sage); }
+  .nav-cta { background: var(--forest); color: white !important; padding: 0.6rem 1.5rem; border-radius: 2rem; font-size: 0.82rem !important; letter-spacing: 0.06em !important; transition: background 0.3s !important; }
+  .nav-cta:hover { background: var(--sage) !important; color: white !important; }
+  .hero { min-height: 100vh; display: flex; align-items: center; padding: 8rem 4rem 4rem; position: relative; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, var(--cream) 0%, #F0EDE8 40%, #E8F0E8 100%); z-index: 0; }
+  .hero-botanical { position: absolute; right: -60px; top: -60px; width: 600px; height: 600px; opacity: 0.07; z-index: 0; }
+  .hero-content { position: relative; z-index: 1; max-width: 640px; animation: fadeUp 1s ease 0.2s both; }
+  .hero-eyebrow { display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sage); margin-bottom: 1.5rem; }
+  .hero-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--sage); }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 5vw, 4.2rem); font-weight: 500; line-height: 1.12; color: var(--forest); margin-bottom: 1.5rem; letter-spacing: -0.02em; }
+  .hero h1 em { font-style: italic; color: var(--sage); }
+  .hero p { font-size: 1.1rem; font-weight: 300; line-height: 1.8; color: var(--text-mid); margin-bottom: 2.5rem; max-width: 520px; }
+  .hero-actions { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+  .btn-primary { background: var(--forest); color: white; padding: 1rem 2.2rem; border-radius: 3rem; font-size: 0.9rem; font-weight: 500; letter-spacing: 0.04em; text-decoration: none; border: none; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 0.5rem; }
+  .btn-primary:hover { background: var(--sage); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(44,62,45,0.2); }
+  .btn-ghost { color: var(--forest); font-size: 0.9rem; font-weight: 400; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; border-bottom: 1px solid var(--border); padding-bottom: 2px; transition: all 0.3s; }
+  .btn-ghost:hover { color: var(--sage); border-color: var(--sage); }
+  .hero-visual { position: absolute; right: 4rem; top: 50%; transform: translateY(-50%); z-index: 1; animation: fadeLeft 1s ease 0.5s both; }
+  .hero-phone { width: 280px; background: var(--forest); border-radius: 2.5rem; padding: 1.5rem 1.2rem; box-shadow: 0 40px 80px rgba(44,62,45,0.25), 0 0 0 1px rgba(255,255,255,0.1); position: relative; }
+  .phone-notch { width: 80px; height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; margin: 0 auto 1.2rem; }
+  .phone-card { background: var(--cream); border-radius: 1.2rem; padding: 1.2rem; margin-bottom: 0.8rem; }
+  .phone-week-badge { display: inline-block; background: var(--sage-pale); color: var(--sage); font-size: 0.65rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.25rem 0.7rem; border-radius: 2rem; margin-bottom: 0.6rem; }
+  .phone-name { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--forest); margin-bottom: 0.3rem; }
+  .phone-sub { font-size: 0.7rem; color: var(--text-muted); line-height: 1.5; }
+  .phone-baby-size { background: var(--forest); border-radius: 1rem; padding: 1rem; display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.8rem; border: 1px solid rgba(255,255,255,0.1); }
+  .phone-baby-icon { font-size: 1.8rem; }
+  .phone-baby-label { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sage-light); margin-bottom: 0.2rem; }
+  .phone-baby-value { font-family: 'Playfair Display', serif; font-size: 0.85rem; color: white; }
+  .phone-affirmation { background: var(--gold-light); border-radius: 1rem; padding: 0.8rem 1rem; font-family: 'Playfair Display', serif; font-size: 0.72rem; font-style: italic; color: var(--forest); line-height: 1.5; text-align: center; }
+  .floating-card { position: absolute; background: white; border-radius: 1rem; padding: 0.8rem 1rem; box-shadow: 0 12px 32px rgba(44,62,45,0.12); animation: float 4s ease-in-out infinite; }
+  .floating-card-1 { right: -30px; top: 20%; animation-delay: 0s; }
+  .floating-card-2 { left: -40px; bottom: 25%; animation-delay: 2s; }
+  .fc-label { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.2rem; }
+  .fc-value { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--forest); }
+  .fc-sub { font-size: 0.65rem; color: var(--text-muted); }
+  .stats-bar { background: var(--forest); padding: 2rem 4rem; display: flex; align-items: center; justify-content: space-around; flex-wrap: wrap; gap: 2rem; }
+  .stat-item { text-align: center; }
+  .stat-number { font-family: 'Playfair Display', serif; font-size: 2rem; color: white; margin-bottom: 0.2rem; }
+  .stat-number span { color: var(--gold); }
+  .stat-label { font-size: 0.75rem; font-weight: 300; letter-spacing: 0.06em; text-transform: uppercase; color: var(--sage-light); }
+  .stat-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.1); }
+  section { padding: 6rem 4rem; }
+  .section-label { display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sage); margin-bottom: 1rem; }
+  .section-label::before { content: ''; display: block; width: 20px; height: 1px; background: var(--sage); }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 500; color: var(--forest); line-height: 1.2; margin-bottom: 1rem; letter-spacing: -0.01em; }
+  .section-subtitle { font-size: 1rem; font-weight: 300; color: var(--text-mid); line-height: 1.8; max-width: 560px; }
+  .how-section { background: var(--cream); }
+  .how-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; margin-top: 4rem; }
+  .how-steps { display: flex; flex-direction: column; gap: 0; }
+  .how-step { display: flex; gap: 1.5rem; padding: 1.8rem 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: all 0.3s; }
+  .how-step:first-child { padding-top: 0; }
+  .how-step:last-child { border-bottom: none; }
+  .step-number { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 400; color: var(--sage-pale); line-height: 1; min-width: 48px; transition: color 0.3s; }
+  .how-step:hover .step-number, .how-step.active .step-number { color: var(--gold); }
+  .step-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--forest); margin-bottom: 0.4rem; }
+  .step-desc { font-size: 0.88rem; font-weight: 300; color: var(--text-mid); line-height: 1.7; }
+  .how-visual { background: var(--forest); border-radius: 2rem; padding: 2.5rem; min-height: 420px; position: relative; overflow: hidden; }
+  .how-visual-bg { position: absolute; inset: 0; background: radial-gradient(circle at 70% 30%, rgba(124,154,126,0.2) 0%, transparent 60%); }
+  .week-display { position: relative; z-index: 1; }
+  .week-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+  .week-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: white; }
+  .week-badge { background: var(--sage); color: white; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.3rem 0.8rem; border-radius: 2rem; }
+  .week-items { display: flex; flex-direction: column; gap: 0.8rem; }
+  .week-item { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.8rem; padding: 0.9rem 1.1rem; display: flex; align-items: center; gap: 0.8rem; }
+  .week-item-icon { width: 32px; height: 32px; background: rgba(124,154,126,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
+  .week-item-text { font-size: 0.8rem; color: rgba(255,255,255,0.85); line-height: 1.4; }
+  .week-item-bold { color: white; font-weight: 500; }
+  .features-section { background: white; }
+  .features-header { max-width: 560px; margin-bottom: 4rem; }
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .feature-card { padding: 2rem; border: 1px solid var(--border); border-radius: 1.5rem; transition: all 0.3s; position: relative; overflow: hidden; }
+  .feature-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--sage), var(--gold)); opacity: 0; transition: opacity 0.3s; }
+  .feature-card:hover { border-color: var(--sage-light); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(124,154,126,0.12); }
+  .feature-card:hover::before { opacity: 1; }
+  .feature-icon { width: 48px; height: 48px; background: var(--sage-pale); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 1.2rem; }
+  .feature-title { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--forest); margin-bottom: 0.6rem; }
+  .feature-desc { font-size: 0.85rem; font-weight: 300; color: var(--text-mid); line-height: 1.75; }
+  .testimonials-section { background: var(--sage-pale); position: relative; overflow: hidden; }
+  .testimonials-bg { position: absolute; right: -100px; top: -100px; width: 500px; height: 500px; opacity: 0.04; }
+  .testimonials-header { text-align: center; margin-bottom: 3.5rem; }
+  .testimonials-header .section-subtitle { margin: 0 auto; }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; position: relative; z-index: 1; }
+  .testimonial-card { background: white; border-radius: 1.5rem; padding: 2rem; border: 1px solid var(--border); transition: transform 0.3s; }
+  .testimonial-card:hover { transform: translateY(-4px); }
+  .testimonial-card.featured { background: var(--forest); border-color: transparent; }
+  .stars { display: flex; gap: 2px; margin-bottom: 1rem; }
+  .star { color: var(--gold); font-size: 0.8rem; }
+  .testimonial-text { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-style: italic; line-height: 1.7; color: var(--text-dark); margin-bottom: 1.2rem; }
+  .testimonial-card.featured .testimonial-text { color: rgba(255,255,255,0.9); }
+  .testimonial-author { display: flex; align-items: center; gap: 0.8rem; }
+  .author-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--sage-pale); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 500; color: var(--sage); flex-shrink: 0; }
+  .testimonial-card.featured .author-avatar { background: rgba(255,255,255,0.15); color: white; }
+  .author-name { font-size: 0.82rem; font-weight: 500; color: var(--forest); }
+  .testimonial-card.featured .author-name { color: white; }
+  .author-role { font-size: 0.72rem; color: var(--text-muted); }
+  .testimonial-card.featured .author-role { color: var(--sage-light); }
+  .video-section { background: var(--cream); }
+  .video-inner { max-width: 860px; margin: 0 auto; text-align: center; }
+  .video-player { margin-top: 3rem; background: var(--forest); border-radius: 2rem; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; cursor: pointer; }
+  .video-overlay { position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(124,154,126,0.15) 0%, transparent 70%); }
+  .play-btn { width: 72px; height: 72px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; transition: all 0.3s; box-shadow: 0 0 0 12px rgba(255,255,255,0.1); }
+  .play-btn:hover { transform: scale(1.1); box-shadow: 0 0 0 20px rgba(255,255,255,0.08); }
+  .play-icon { width: 0; height: 0; border-style: solid; border-width: 12px 0 12px 22px; border-color: transparent transparent transparent var(--forest); margin-left: 4px; }
+  .video-label { margin-top: 1.2rem; font-size: 0.82rem; color: var(--text-muted); letter-spacing: 0.04em; }
+  .contact-section { background: var(--forest); position: relative; overflow: hidden; }
+  .contact-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 50%, rgba(124,154,126,0.15) 0%, transparent 60%); }
+  .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; position: relative; z-index: 1; }
+  .contact-left .section-label { color: var(--sage-light); }
+  .contact-left .section-label::before { background: var(--sage-light); }
+  .contact-left .section-title { color: white; }
+  .contact-left .section-subtitle { color: rgba(255,255,255,0.6); }
+  .contact-promise { margin-top: 2rem; display: flex; flex-direction: column; gap: 0.8rem; }
+  .promise-item { display: flex; align-items: center; gap: 0.8rem; font-size: 0.85rem; color: rgba(255,255,255,0.75); }
+  .promise-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
+  .contact-form { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; padding: 2.5rem; }
+  .form-group { margin-bottom: 1.2rem; }
+  .form-label { display: block; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 0.5rem; }
+  .form-input, .form-select { width: 100%; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 0.8rem; padding: 0.85rem 1rem; color: white; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none; transition: border-color 0.3s; }
+  .form-input::placeholder { color: rgba(255,255,255,0.3); }
+  .form-input:focus, .form-select:focus { border-color: var(--sage); }
+  .form-select option { background: var(--forest); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .btn-submit { width: 100%; background: var(--gold); color: var(--forest); border: none; border-radius: 3rem; padding: 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500; letter-spacing: 0.04em; cursor: pointer; transition: all 0.3s; margin-top: 0.5rem; }
+  .btn-submit:hover { background: #D4B87A; transform: translateY(-2px); }
+  footer { background: var(--text-dark); padding: 2.5rem 4rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  .footer-logo { font-family: 'Playfair Display', serif; font-size: 1rem; color: rgba(255,255,255,0.7); }
+  .footer-logo span { color: var(--gold); }
+  .footer-copy { font-size: 0.78rem; color: rgba(255,255,255,0.35); }
+  .footer-links { display: flex; gap: 2rem; list-style: none; }
+  .footer-links a { font-size: 0.78rem; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--sage-light); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeLeft { from { opacity: 0; transform: translate(30px, -50%); } to { opacity: 1; transform: translate(0, -50%); } }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .reveal { opacity: 0; transform: translateY(24px); transition: all 0.7s cubic-bezier(0.22,1,0.36,1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  @media (max-width: 1024px) {
+    nav { padding: 1rem 2rem; }
+    .hero { padding: 7rem 2rem 4rem; }
+    .hero-visual { display: none; }
+    section { padding: 4rem 2rem; }
+    .how-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .features-grid { grid-template-columns: repeat(2, 1fr); }
+    .testimonials-grid { grid-template-columns: 1fr 1fr; }
+    .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .stats-bar { padding: 2rem; }
+    footer { padding: 2rem; flex-direction: column; align-items: flex-start; }
+  }
+  @media (max-width: 640px) {
+    .features-grid { grid-template-columns: 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-logo">The Pregnancy Journey <span>Companion</span></div>
+  <ul class="nav-links">
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#testimonials">Stories</a></li>
+    <li><a href="#contact" class="nav-cta">Book a Demo</a></li>
+  </ul>
+</nav>
+<section class="hero">
+  <div class="hero-bg"></div>
+  <svg class="hero-botanical" viewBox="0 0 400 400" fill="none">
+    <circle cx="200" cy="200" r="180" stroke="#7C9A7E" stroke-width="0.5"/>
+    <circle cx="200" cy="200" r="140" stroke="#7C9A7E" stroke-width="0.5"/>
+    <circle cx="200" cy="200" r="100" stroke="#7C9A7E" stroke-width="0.5"/>
+    <path d="M200 20 C200 20 280 100 280 200 C280 300 200 380 200 380 C200 380 120 300 120 200 C120 100 200 20 200 20Z" stroke="#7C9A7E" stroke-width="0.5" fill="none"/>
+    <path d="M20 200 C20 200 100 120 200 120 C300 120 380 200 380 200 C380 200 300 280 200 280 C100 280 20 200 20 200Z" stroke="#7C9A7E" stroke-width="0.5" fill="none"/>
+    <path d="M200 200 L200 20" stroke="#7C9A7E" stroke-width="0.3"/>
+    <path d="M200 200 L380 200" stroke="#7C9A7E" stroke-width="0.3"/>
+    <path d="M200 200 L200 380" stroke="#7C9A7E" stroke-width="0.3"/>
+    <path d="M200 200 L20 200" stroke="#7C9A7E" stroke-width="0.3"/>
+  </svg>
+  <div class="hero-content">
+    <div class="hero-eyebrow">AI-Powered Maternal Care</div>
+    <h1>Every mama. <em>Every week.</em> Without lifting a finger.</h1>
+    <p>The intelligent care system that delivers deeply personalised weekly support to every pregnant woman in your practice — automatically, beautifully, and on time.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Book a 90-Second Demo →</a>
+      <a href="#how" class="btn-ghost">See how it works ↓</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-phone">
+      <div class="phone-notch"></div>
+      <div class="phone-card">
+        <div class="phone-week-badge">Week 22 · Tuesday</div>
+        <div class="phone-name">Good morning, Sarah ✨</div>
+        <div class="phone-sub">Your personalised weekly update from your midwife is ready.</div>
+      </div>
+      <div class="phone-baby-size">
+        <div class="phone-baby-icon">🌿</div>
+        <div class="phone-baby-text">
+          <div class="phone-baby-label">Baby this week</div>
+          <div class="phone-baby-value">Size of a papaya</div>
+        </div>
+      </div>
+      <div class="phone-affirmation">"Your body knows exactly what it is doing. Trust it completely."</div>
+    </div>
+    <div class="floating-card floating-card-1">
+      <div class="fc-label">Weekly reach</div>
+      <div class="fc-value">40 weeks</div>
+      <div class="fc-sub">vs 8–10 appointments</div>
+    </div>
+    <div class="floating-card floating-card-2">
+      <div class="fc-label">Delivered every</div>
+      <div class="fc-value">Monday 9am</div>
+      <div class="fc-sub">Fully automatic</div>
+    </div>
+  </div>
+</section>
+<div class="stats-bar reveal">
+  <div class="stat-item"><div class="stat-number">40<span>×</span></div><div class="stat-label">Weekly touchpoints</div></div>
+  <div class="stat-divider"></div>
+  <div class="stat-item"><div class="stat-number">3<span> channels</span></div><div class="stat-label">Email · Webpage · WhatsApp</div></div>
+  <div class="stat-divider"></div>
+  <div class="stat-item"><div class="stat-number">0<span> hrs</span></div><div class="stat-label">Extra work from your team</div></div>
+  <div class="stat-divider"></div>
+  <div class="stat-item"><div class="stat-number">100<span>%</span></div><div class="stat-label">Personalised per patient</div></div>
+</div>
+<section class="how-section" id="how">
+  <div class="section-label">How it works</div>
+  <div class="how-grid">
+    <div class="how-steps">
+      <div class="section-title">Simple for you.<br>Magical for her.</div>
+      <div class="section-subtitle" style="margin-bottom: 2.5rem;">Your team does nothing. Every Monday morning, the system does everything.</div>
+      <div class="how-step active">
+        <div class="step-number">01</div>
+        <div class="step-content"><div class="step-title">Patient is onboarded</div><div class="step-desc">Add her name, due date, partner's name and dietary preferences once. That is all you ever need to do.</div></div>
+      </div>
+      <div class="how-step">
+        <div class="step-number">02</div>
+        <div class="step-content"><div class="step-title">System calculates her week</div><div class="step-desc">Every Monday, the system knows exactly what week she is on and generates everything specific to that moment in her pregnancy.</div></div>
+      </div>
+      <div class="how-step">
+        <div class="step-number">03</div>
+        <div class="step-content"><div class="step-title">Personalised content is created</div><div class="step-desc">AI generates her weekly email, meal plan, symptoms guide, partner note, and affirmation — all tailored specifically to her.</div></div>
+      </div>
+      <div class="how-step">
+        <div class="step-number">04</div>
+        <div class="step-content"><div class="step-title">Delivered across three channels</div><div class="step-desc">She receives a beautiful email, her private webpage is updated, and a WhatsApp message lands on her phone — all before 9am.</div></div>
+      </div>
+    </div>
+    <div class="how-visual reveal">
+      <div class="how-visual-bg"></div>
+      <div class="week-display">
+        <div class="week-header"><div class="week-title">Sarah's Week 22 Update</div><div class="week-badge">Auto-generated</div></div>
+        <div class="week-items">
+          <div class="week-item"><div class="week-item-icon">🍼</div><div class="week-item-text"><span class="week-item-bold">Baby development</span><br>Weighs about 430g, the size of a papaya. Eyes now developed.</div></div>
+          <div class="week-item"><div class="week-item-icon">🥗</div><div class="week-item-text"><span class="week-item-bold">7-day meal plan</span><br>Tailored to Sarah's plant-based diet and iron needs.</div></div>
+          <div class="week-item"><div class="week-item-icon">💊</div><div class="week-item-text"><span class="week-item-bold">3 symptoms to expect</span><br>Back pain, leg cramps, and heartburn — with tips for each.</div></div>
+          <div class="week-item"><div class="week-item-icon">💌</div><div class="week-item-text"><span class="week-item-bold">Note to James</span><br>Personalised message to her partner by name.</div></div>
+          <div class="week-item"><div class="week-item-icon">🌿</div><div class="week-item-text"><span class="week-item-bold">Weekly affirmation</span><br>A carefully chosen affirmation to carry her through the week.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="features-section" id="features">
+  <div class="features-header reveal">
+    <div class="section-label">What she receives</div>
+    <div class="section-title">Three touchpoints.<br>One seamless experience.</div>
+    <div class="section-subtitle">Every delivery channel works together to make her feel held, informed, and deeply connected to your practice.</div>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card reveal"><div class="feature-icon">📧</div><div class="feature-title">Personalised Weekly Email</div><div class="feature-desc">A beautifully formatted email arriving every Monday with baby development, meal plan, symptom guidance, a partner note, and an affirmation — all specific to her week and her life.</div></div>
+    <div class="feature-card reveal" style="transition-delay: 0.1s;"><div class="feature-icon">🌿</div><div class="feature-title">Private Companion Webpage</div><div class="feature-desc">Her own private webpage, updated every week with her journey. She can bookmark it, revisit any week, and share it with family — a living record of her entire 40 weeks.</div></div>
+    <div class="feature-card reveal" style="transition-delay: 0.2s;"><div class="feature-icon">📱</div><div class="feature-title">WhatsApp Delivery</div><div class="feature-desc">The same update delivered via WhatsApp so it reaches her where she actually lives — no email app needed, no login required. Instant, warm, and personal.</div></div>
+    <div class="feature-card reveal" style="transition-delay: 0.1s;"><div class="feature-icon">✨</div><div class="feature-title">Milestone Recognition</div><div class="feature-desc">Special milestone weeks receive elevated, celebratory content that marks the moment meaningfully — making her feel truly seen at every stage.</div></div>
+    <div class="feature-card reveal" style="transition-delay: 0.2s;"><div class="feature-icon">🤝</div><div class="feature-title">Partner Inclusion</div><div class="feature-desc">Every weekly update includes a personal note addressed to her partner by name — making them feel included, informed, and part of the journey from week one.</div></div>
+    <div class="feature-card reveal" style="transition-delay: 0.3s;"><div class="feature-icon">⚙️</div><div class="feature-title">Fully Automated</div><div class="feature-desc">Once a patient is onboarded, everything runs without you. No weekly tasks, no content creation, no scheduling. Your team does nothing. The system does everything.</div></div>
+  </div>
+</section>
+<section class="testimonials-section" id="testimonials">
+  <svg class="testimonials-bg" viewBox="0 0 400 400"><circle cx="200" cy="200" r="180" stroke="#7C9A7E" stroke-width="1" fill="none"/><circle cx="200" cy="200" r="120" stroke="#7C9A7E" stroke-width="1" fill="none"/></svg>
+  <div class="testimonials-header reveal">
+    <div class="section-label" style="justify-content: center;">Stories from the field</div>
+    <div class="section-title">What practitioners are saying</div>
+    <div class="section-subtitle">From independent midwives to birth centers across the US and UK.</div>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card reveal">
+      <div class="stars">★★★★★</div>
+      <div class="testimonial-text">"My clients keep telling me they feel so taken care of between appointments. One mama said it felt like I was thinking about her every single week. I genuinely was not — but the system was."</div>
+      <div class="testimonial-author"><div class="author-avatar">CT</div><div><div class="author-name">Christine Taylor, CNM</div><div class="author-role">Birth by Grace · Arlington, TX</div></div></div>
+    </div>
+    <div class="testimonial-card featured reveal" style="transition-delay: 0.1s;">
+      <div class="stars">★★★★★</div>
+      <div class="testimonial-text">"I was getting so many between-appointment messages. Now my mamas have everything they need delivered to them every week. The calls have dropped and the relationship feels stronger than ever."</div>
+      <div class="testimonial-author"><div class="author-avatar">BT</div><div><div class="author-name">Bethany Stricker, CPM</div><div class="author-role">North Texas Midwifery · Dallas, TX</div></div></div>
+    </div>
+    <div class="testimonial-card reveal" style="transition-delay: 0.2s;">
+      <div class="stars">★★★★★</div>
+      <div class="testimonial-text">"The referrals have genuinely increased since we started. Mamas are telling their friends it is unlike any birth practice they have ever heard of. That is exactly what I was going for."</div>
+      <div class="testimonial-author"><div class="author-avatar">ML</div><div><div class="author-name">Midwife Lily</div><div class="author-role">From Bumps to Babies · Bicester, UK</div></div></div>
+    </div>
+  </div>
+</section>
+<section class="video-section" id="demo">
+  <div class="video-inner reveal">
+    <div class="section-label" style="justify-content: center;">See it in action</div>
+    <div class="section-title" style="text-align: center;">90 seconds. That is all it takes.</div>
+    <div class="section-subtitle" style="margin: 0 auto; text-align: center;">No pitch deck. No slides. Just the system running live so you can see exactly what your mamas will experience every single week.</div>
+    <div class="video-player">
+      <div class="video-overlay"></div>
+      <div class="play-btn"><div class="play-icon"></div></div>
+    </div>
+    <div class="video-label">90-second live walkthrough · No sign-up required</div>
+  </div>
+</section>
+<section class="contact-section" id="contact">
+  <div class="contact-bg"></div>
+  <div class="contact-inner">
+    <div class="contact-left reveal">
+      <div class="section-label">Get started</div>
+      <div class="section-title">Ready to give every mama 40 weeks of care?</div>
+      <div class="section-subtitle">Send a message and I will be in touch within 24 hours to show you exactly how the Companion works for your practice.</div>
+      <div class="contact-promise">
+        <div class="promise-item"><div class="promise-dot"></div>No long sales call — just a 90 second video walkthrough</div>
+        <div class="promise-item"><div class="promise-dot"></div>Set up takes less than one working day</div>
+        <div class="promise-item"><div class="promise-dot"></div>Works with any practice size, anywhere in the world</div>
+        <div class="promise-item"><div class="promise-dot"></div>Zero technical knowledge required from your team</div>
+      </div>
+    </div>
+    <div class="contact-form reveal" style="transition-delay: 0.15s;">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">First name</label><input type="text" class="form-input" placeholder="Sarah"></div>
+        <div class="form-group"><label class="form-label">Last name</label><input type="text" class="form-input" placeholder="Johnson"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Email address</label><input type="email" class="form-input" placeholder="hello@yourpractice.com"></div>
+      <div class="form-group"><label class="form-label">Practice name</label><input type="text" class="form-input" placeholder="Birth & Wellness Center"></div>
+      <div class="form-group">
+        <label class="form-label">Your role</label>
+        <select class="form-select form-input">
+          <option value="" disabled selected>Select your role</option>
+          <option>Certified Nurse Midwife (CNM)</option>
+          <option>Certified Professional Midwife (CPM)</option>
+          <option>Birth Doula</option>
+          <option>Birth Center Director</option>
+          <option>OB/GYN Practice</option>
+          <option>Prenatal Educator</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <button class="btn-submit" onclick="handleSubmit()">Send me the 90-second video →</button>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="footer-logo">The Pregnancy Journey <span>Companion</span></div>
+  <ul class="footer-links">
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="footer-copy">© 2026 Johnson Oyet · Built with care</div>
+</footer>
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => { if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i * 60); } });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+  function handleSubmit() {
+    const btn = document.querySelector('.btn-submit');
+    btn.textContent = 'Sent! I will be in touch within 24 hours ✓';
+    btn.style.background = 'var(--sage)';
+    btn.style.color = 'white';
+  }
+</script>
+</body>
+</html>
